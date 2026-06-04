@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Simulez en ligne votre prêt FinaFlex. Découvrez nos solutions de financement : prêt personnel, crédit auto, travaux et rachat de crédits.">
+  <meta name="keywords" content="crédit, prêt personnel, crédit auto, travaux, rachat de crédits, finaflex">
+  <title>FinaFlex : prêt personnel, auto, travaux et rachat de crédits</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:       #0a3d8f;
+      --blue-dark:  #072d6b;
+      --blue-light: #1565c0;
+      --accent:     #e8f0fe;
+      --white:      #ffffff;
+      --gray-1:     #f4f6fb;
+      --gray-2:     #e0e6f0;
+      --gray-3:     #6b7a99;
+      --text:       #1a2340;
+      --radius:     10px;
+      --shadow:     0 4px 24px rgba(10,61,143,.10);
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── BANNER ── */
+    .legal-banner {
+      background: var(--blue-dark);
+      color: #b8c8e8;
+      text-align: center;
+      font-size: .78rem;
+      padding: .45rem 1rem;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--white);
+      box-shadow: 0 2px 12px rgba(10,61,143,.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .9rem 1.5rem;
+    }
+
+    .logo {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: -1px;
+    }
+    .logo span { color: var(--blue-light); }
+
+    nav { display: flex; gap: 1.5rem; align-items: center; }
+    nav a {
+      font-size: .9rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: color .2s;
+    }
+    nav a:hover { color: var(--blue); }
+
+    .btn {
+      display: inline-block;
+      padding: .6rem 1.4rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: .9rem;
+      cursor: pointer;
+      transition: background .2s, transform .1s;
+    }
+    .btn-primary { background: var(--blue); color: var(--white); border: none; }
+    .btn-primary:hover { background: var(--blue-dark); }
+    .btn-outline { background: transparent; color: var(--blue); border: 2px solid var(--blue); }
+    .btn-outline:hover { background: var(--accent); }
+    .btn-lg { padding: .85rem 2rem; font-size: 1rem; border-radius: 8px; }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 25px; height: 2px; background: var(--blue); border-radius: 2px; display: block; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 60%, var(--blue-light) 100%);
+      color: var(--white);
+      padding: 5rem 1.5rem 4rem;
+    }
+    .hero-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    .hero h1 { font-size: 2.6rem; line-height: 1.2; margin-bottom: 1rem; }
+    .hero h1 em { font-style: normal; color: #90caf9; }
+    .hero p { font-size: 1.1rem; opacity: .88; margin-bottom: 2rem; }
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    /* simulator card */
+    .simulator-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      color: var(--text);
+    }
+    .simulator-card h3 { font-size: 1.1rem; color: var(--blue); margin-bottom: 1.5rem; }
+    .sim-row { margin-bottom: 1.2rem; }
+    .sim-row label { display: block; font-size: .82rem; font-weight: 600; margin-bottom: .35rem; color: var(--gray-3); text-transform: uppercase; letter-spacing: .5px; }
+    .sim-row input[type=range] { width: 100%; accent-color: var(--blue); }
+    .sim-val { font-size: 1.3rem; font-weight: 700; color: var(--blue); }
+    .sim-result {
+      background: var(--accent);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .sim-result .monthly { font-size: 2rem; font-weight: 800; color: var(--blue); }
+    .sim-result .monthly span { font-size: 1rem; font-weight: 500; color: var(--gray-3); }
+    .sim-note { font-size: .72rem; color: var(--gray-3); margin-top: .5rem; }
+
+    /* ── SECTION WRAPPER ── */
+    section { padding: 4.5rem 1.5rem; }
+    .section-inner { max-width: 1200px; margin: auto; }
+    .section-title { font-size: 1.9rem; font-weight: 700; margin-bottom: .6rem; }
+    .section-sub { color: var(--gray-3); font-size: 1rem; margin-bottom: 2.5rem; max-width: 600px; }
+
+    /* ── PRODUCTS ── */
+    .products { background: var(--gray-1); }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .product-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      box-shadow: var(--shadow);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(10,61,143,.15); }
+    .product-icon {
+      width: 52px; height: 52px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .product-card h3 { font-size: 1.1rem; margin-bottom: .5rem; color: var(--blue); }
+    .product-card p { font-size: .9rem; color: var(--gray-3); margin-bottom: 1.2rem; }
+    .product-card .rate { font-size: 1.5rem; font-weight: 800; color: var(--blue); }
+    .product-card .rate span { font-size: .8rem; font-weight: 500; color: var(--gray-3); }
+
+    /* ── AVANTAGES ── */
+    .avantages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      text-align: center;
+    }
+    .avantage-item .icon { font-size: 2.4rem; margin-bottom: .75rem; }
+    .avantage-item h4 { font-size: 1rem; font-weight: 700; margin-bottom: .4rem; }
+    .avantage-item p { font-size: .88rem; color: var(--gray-3); }
+
+    /* ── ETAPES ── */
+    .etapes { background: var(--accent); }
+    .steps-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+    .step { position: relative; padding-left: 3.5rem; }
+    .step-num {
+      position: absolute; left: 0; top: 0;
+      width: 2.4rem; height: 2.4rem;
+      background: var(--blue);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1rem;
+    }
+    .step h4 { font-size: 1rem; font-weight: 700; margin-bottom: .4rem; }
+    .step p { font-size: .88rem; color: var(--gray-3); }
+
+    /* ── AVIS ── */
+    .avis-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .avis-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    .stars { color: #f5a623; font-size: 1.1rem; margin-bottom: .6rem; }
+    .avis-card p { font-size: .9rem; color: var(--gray-3); margin-bottom: .8rem; }
+    .avis-author { font-weight: 600; font-size: .85rem; }
+
+    /* ── STATS ── */
+    .stats { background: var(--blue); color: var(--white); text-align: center; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 2rem;
+    }
+    .stat-item .num { font-size: 2.5rem; font-weight: 800; }
+    .stat-item .label { font-size: .9rem; opacity: .8; }
+
+    /* ── FAQ ── */
+    .faq-list { max-width: 800px; }
+    details {
+      border-bottom: 1px solid var(--gray-2);
+      padding: 1rem 0;
+    }
+    summary {
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    summary::after { content: '+'; font-size: 1.3rem; color: var(--blue); }
+    details[open] summary::after { content: '−'; }
+    details p { margin-top: .75rem; color: var(--gray-3); font-size: .92rem; }
+
+    /* ── CTA BAND ── */
+    .cta-band {
+      background: linear-gradient(90deg, var(--blue-dark), var(--blue-light));
+      color: var(--white);
+      text-align: center;
+      padding: 4rem 1.5rem;
+    }
+    .cta-band h2 { font-size: 2rem; margin-bottom: .75rem; }
+    .cta-band p { opacity: .85; margin-bottom: 2rem; font-size: 1.05rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--blue-dark);
+      color: #8fa8d4;
+      padding: 3rem 1.5rem 1.5rem;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: auto;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 2.5rem;
+      margin-bottom: 2rem;
+    }
+    .footer-brand .logo { font-size: 1.4rem; color: var(--white); }
+    .footer-brand p { margin-top: .8rem; font-size: .85rem; line-height: 1.7; }
+    .footer-col h5 { color: var(--white); font-size: .9rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: .5px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: .6rem; }
+    .footer-col ul li a { font-size: .85rem; transition: color .2s; }
+    .footer-col ul li a:hover { color: var(--white); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.1);
+      padding-top: 1.5rem;
+      font-size: .78rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .legal-footer {
+      background: var(--blue-dark);
+      color: #8fa8d4;
+      font-size: .75rem;
+      padding: 1rem 1.5rem;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      nav { display: none; }
+      nav.open { display: flex; flex-direction: column; align-items: flex-start; position: absolute; top: 68px; left: 0; right: 0; background: var(--white); padding: 1rem 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,.1); gap: 1rem; }
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 580px) {
+      .hero h1 { font-size: 1.8rem; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="legal-banner">
+    Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <div class="logo">Fina<span>Flex</span></div>
+      <nav id="main-nav">
+        <a href="#produits">Nos crédits</a>
+        <a href="#etapes">Comment ça marche</a>
+        <a href="#avis">Avis clients</a>
+        <a href="#faq">FAQ</a>
+        <a href="#" class="btn btn-outline">Mon espace</a>
+        <a href="#simulateur" class="btn btn-primary">Simuler mon crédit</a>
+      </nav>
+      <div class="hamburger" id="hamburger" onclick="document.getElementById('main-nav').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO + SIMULATEUR -->
+  <section class="hero" id="simulateur">
+    <div class="hero-inner">
+      <div>
+        <h1>Financez vos projets avec <em>FinaFlex</em></h1>
+        <p>Des solutions de crédit simples, rapides et transparentes — réponse de principe en quelques minutes.</p>
+        <div class="hero-cta">
+          <a href="#produits" class="btn btn-primary btn-lg">Découvrir nos offres</a>
+          <a href="#etapes" class="btn btn-outline btn-lg" style="border-color:#fff;color:#fff;">Comment ça marche</a>
+        </div>
+      </div>
+
+      <div class="simulator-card">
+        <h3>Simulez votre mensualité</h3>
+        <div class="sim-row">
+          <label>Montant souhaité</label>
+          <input type="range" id="amount" min="1000" max="75000" step="500" value="10000" oninput="calcSim()">
+          <div class="sim-val" id="amountVal">10 000 €</div>
+        </div>
+        <div class="sim-row">
+          <label>Durée</label>
+          <input type="range" id="duration" min="6" max="84" step="6" value="36" oninput="calcSim()">
+          <div class="sim-val" id="durationVal">36 mois</div>
+        </div>
+        <div class="sim-result">
+          <div>Mensualité estimée</div>
+          <div class="monthly" id="monthly">310 €<span>/mois</span></div>
+          <div class="sim-note">Taux indicatif · TAEG fixe · Sous réserve d'acceptation</div>
+        </div>
+        <a href="#" class="btn btn-primary" style="width:100%;text-align:center;margin-top:1rem;">Faire ma demande</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUITS -->
+  <section class="products" id="produits">
+    <div class="section-inner">
+      <h2 class="section-title">Nos solutions de financement</h2>
+      <p class="section-sub">Que ce soit pour un projet personnel, un véhicule ou des travaux, FinaFlex a la solution adaptée.</p>
+      <div class="cards-grid">
+        <div class="product-card">
+          <div class="product-icon">💼</div>
+          <h3>Prêt personnel</h3>
+          <p>Financement libre pour tous vos projets — voyage, mariage, équipement ou imprévu.</p>
+          <div class="rate">dès 3,9 %<span> TAEG</span></div>
+          <br>
+          <a href="#" class="btn btn-outline" style="margin-top:.8rem;">Simuler</a>
+        </div>
+        <div class="product-card">
+          <div class="product-icon">🚗</div>
+          <h3>Crédit auto</h3>
+          <p>Neuf ou occasion, financez votre véhicule avec des conditions avantageuses et flexibles.</p>
+          <div class="rate">dès 3,5 %<span> TAEG</span></div>
+          <br>
+          <a href="#" class="btn btn-outline" style="margin-top:.8rem;">Simuler</a>
+        </div>
+        <div class="product-card">
+          <div class="product-icon">🔨</div>
+          <h3>Crédit travaux</h3>
+          <p>Rénovation, extension, isolation — transformez votre logement sans puiser dans votre épargne.</p>
+          <div class="rate">dès 4,2 %<span> TAEG</span></div>
+          <br>
+          <a href="#" class="btn btn-outline" style="margin-top:.8rem;">Simuler</a>
+        </div>
+        <div class="product-card">
+          <div class="product-icon">🔄</div>
+          <h3>Rachat de crédits</h3>
+          <p>Regroupez vos crédits en une seule mensualité réduite pour simplifier votre budget.</p>
+          <div class="rate">dès 5,1 %<span> TAEG</span></div>
+          <br>
+          <a href="#" class="btn btn-outline" style="margin-top:.8rem;">Simuler</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AVANTAGES -->
+  <section>
+    <div class="section-inner">
+      <h2 class="section-title" style="text-align:center;">Pourquoi choisir FinaFlex ?</h2>
+      <p class="section-sub" style="text-align:center;margin:0 auto 2.5rem;">Simplicité, rapidité et transparence à chaque étape.</p>
+      <div class="avantages-grid">
+        <div class="avantage-item">
+          <div class="icon">⚡</div>
+          <h4>Réponse rapide</h4>
+          <p>Réponse de principe en quelques minutes, fonds versés sous 48 h.</p>
+        </div>
+        <div class="avantage-item">
+          <div class="icon">🔒</div>
+          <h4>100 % sécurisé</h4>
+          <p>Données chiffrées, processus conforme RGPD et supervision ACPR.</p>
+        </div>
+        <div class="avantage-item">
+          <div class="icon">📱</div>
+          <h4>100 % en ligne</h4>
+          <p>Simulation, demande et signature électronique depuis votre téléphone.</p>
+        </div>
+        <div class="avantage-item">
+          <div class="icon">🎯</div>
+          <h4>Offre personnalisée</h4>
+          <p>Taux et durée adaptés à votre profil, sans engagement à la simulation.</p>
+        </div>
+        <div class="avantage-item">
+          <div class="icon">🤝</div>
+          <h4>Accompagnement humain</h4>
+          <p>Conseillers disponibles par téléphone et chat du lundi au samedi.</p>
+        </div>
+        <div class="avantage-item">
+          <div class="icon">📄</div>
+          <h4>Zéro frais cachés</h4>
+          <p>TAEG affiché clairement, aucune surprise sur votre contrat.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="section-inner">
+      <div class="stats-grid">
+        <div class="stat-item"><div class="num">450 000+</div><div class="label">Clients satisfaits</div></div>
+        <div class="stat-item"><div class="num">4,7/5</div><div class="label">Note moyenne clients</div></div>
+        <div class="stat-item"><div class="num">48 h</div><div class="label">Délai de versement</div></div>
+        <div class="stat-item"><div class="num">20 ans</div><div class="label">D'expertise en crédit</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETAPES -->
+  <section class="etapes" id="etapes">
+    <div class="section-inner">
+      <h2 class="section-title">Comment ça marche ?</h2>
+      <p class="section-sub">Un parcours simple en 4 étapes, entièrement en ligne.</p>
+      <div class="steps-list">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h4>Simulez</h4>
+          <p>Choisissez votre montant et votre durée pour estimer votre mensualité instantanément.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h4>Faites votre demande</h4>
+          <p>Remplissez le formulaire en ligne en 5 min. Aucun document papier requis à ce stade.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h4>Recevez votre offre</h4>
+          <p>Réponse de principe rapide. Consultez votre offre personnalisée et signez électroniquement.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <h4>Fonds versés</h4>
+          <p>Après acceptation définitive, les fonds sont versés sur votre compte sous 48 heures.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AVIS CLIENTS -->
+  <section id="avis">
+    <div class="section-inner">
+      <h2 class="section-title">Ce que disent nos clients</h2>
+      <p class="section-sub">Plus de 12 000 avis vérifiés sur notre plateforme.</p>
+      <div class="avis-grid">
+        <div class="avis-card">
+          <div class="stars">★★★★★</div>
+          <p>« Demande faite un lundi soir, réponse le lendemain matin et virement reçu sous 48 h. Service impeccable ! »</p>
+          <div class="avis-author">Marie T. — Crédit auto</div>
+        </div>
+        <div class="avis-card">
+          <div class="stars">★★★★★</div>
+          <p>« Interface claire, taux compétitifs et conseiller très disponible par chat. Je recommande sans hésitation. »</p>
+          <div class="avis-author">Julien M. — Prêt personnel</div>
+        </div>
+        <div class="avis-card">
+          <div class="stars">★★★★☆</div>
+          <p>« Rachat de mes trois crédits en un seul. Ma mensualité a baissé de 240 €. Process simple et transparent. »</p>
+          <div class="avis-author">Sophie D. — Rachat de crédits</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section style="background:var(--gray-1);" id="faq">
+    <div class="section-inner">
+      <h2 class="section-title">Questions fréquentes</h2>
+      <div class="faq-list">
+        <details>
+          <summary>Qui peut faire une demande de crédit FinaFlex ?</summary>
+          <p>Toute personne majeure résidant en France, disposant de revenus réguliers. La demande est ouverte aux salariés, indépendants et retraités.</p>
+        </details>
+        <details>
+          <summary>La simulation engage-t-elle à quoi que ce soit ?</summary>
+          <p>Non, la simulation est gratuite et sans engagement. Elle vous donne une estimation indicative de votre mensualité.</p>
+        </details>
+        <details>
+          <summary>Quels documents seront nécessaires ?</summary>
+          <p>Selon le montant demandé : pièce d'identité, justificatif de domicile, derniers bulletins de salaire et relevés bancaires. Tout se dépose en ligne.</p>
+        </details>
+        <details>
+          <summary>En combien de temps les fonds sont-ils versés ?</summary>
+          <p>Après signature électronique et délai légal de rétractation (14 jours), les fonds sont généralement versés en 48 heures ouvrées.</p>
+        </details>
+        <details>
+          <summary>Puis-je rembourser par anticipation ?</summary>
+          <p>Oui. Le remboursement anticipé partiel ou total est possible à tout moment. Des indemnités légales peuvent s'appliquer selon le capital restant dû.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <section class="cta-band">
+    <div class="section-inner" style="text-align:center;">
+      <h2>Prêt à financer votre projet ?</h2>
+      <p>Simulation gratuite, sans engagement et réponse en quelques minutes.</p>
+      <a href="#simulateur" class="btn btn-primary btn-lg" style="background:#fff;color:var(--blue);">Simuler maintenant</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="logo">Fina<span style="color:#90caf9">Flex</span></div>
+          <p>FinaFlex, établissement de crédit agréé, vous accompagne dans tous vos projets de financement avec transparence et simplicité.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Nos crédits</h5>
+          <ul>
+            <li><a href="#">Prêt personnel</a></li>
+            <li><a href="#">Crédit auto</a></li>
+            <li><a href="#">Crédit travaux</a></li>
+            <li><a href="#">Rachat de crédits</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Espace client</h5>
+          <ul>
+            <li><a href="#">Se connecter</a></li>
+            <li><a href="#">Suivre ma demande</a></li>
+            <li><a href="#">Télécharger mes documents</a></li>
+            <li><a href="#">Gérer mon prêt</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Aide</h5>
+          <ul>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#">Mentions légales</a></li>
+            <li><a href="#">Politique de confidentialité</a></li>
+            <li><a href="#">Cookies</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2024 FinaFlex — Tous droits réservés</span>
+        <span>Établissement de crédit soumis au contrôle de l'ACPR</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="legal-footer">
+    Exemple : pour un prêt personnel de 10 000 € sur 36 mois au taux débiteur fixe de 3,75 %, TAEG fixe de 3,9 %, vous remboursez 36 mensualités de 295,10 €. Coût total du crédit : 622 €. Montant total dû : 10 622 €. Offre soumise à conditions. Sous réserve d'acceptation de votre dossier par FinaFlex.
+  </div>
+
+  <script>
+    function fmt(n) {
+      return n.toLocaleString('fr-FR') + ' €';
+    }
+
+    function calcSim() {
+      const amount = parseInt(document.getElementById('amount').value);
+      const months = parseInt(document.getElementById('duration').value);
+      document.getElementById('amountVal').textContent = fmt(amount);
+      document.getElementById('durationVal').textContent = months + ' mois';
+
+      // approximate monthly rate based on duration
+      let annualRate = months <= 24 ? 0.039 : months <= 48 ? 0.042 : 0.045;
+      const r = annualRate / 12;
+      const monthly = amount * r / (1 - Math.pow(1 + r, -months));
+      document.getElementById('monthly').innerHTML = Math.round(monthly).toLocaleString('fr-FR') + ' €<span>/mois</span>';
+    }
+
+    calcSim();
+  </script>
+</body>
+</html>
