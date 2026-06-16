@@ -64,10 +64,15 @@ document.addEventListener('DOMContentLoaded', function () {
       question.addEventListener('click', function () {
         const isOpen = item.classList.contains('open');
         // Close all
-        faqItems.forEach(fi => fi.classList.remove('open'));
+        faqItems.forEach(fi => {
+          fi.classList.remove('open');
+          const q = fi.querySelector('.faq-question');
+          if (q) q.setAttribute('aria-expanded', 'false');
+        });
         // Open clicked if was closed
         if (!isOpen) {
           item.classList.add('open');
+          question.setAttribute('aria-expanded', 'true');
         }
       });
 

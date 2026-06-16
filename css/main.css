@@ -9,6 +9,8 @@
 :root {
   --color-primary: #00334D;
   --color-primary-dark: #002437;
+  --color-cta: #004B44;
+  --color-cta-dark: #003330;
   --color-red: #E3000F;
   --color-white: #FFFFFF;
   --color-light-gray: #F5F5F5;
@@ -143,7 +145,7 @@ input, select, textarea {
 }
 
 .site-logo .logo-text span {
-  color: var(--color-red);
+  color: var(--color-primary);
 }
 
 /* Main Nav */
@@ -467,7 +469,7 @@ input, select, textarea {
    HERO SECTION
    ============================================= */
 .hero-section {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  background: linear-gradient(155deg, #1a7fc1 0%, #005580 40%, #00334D 100%);
   color: var(--color-white);
   padding: 60px 0 40px;
   overflow: hidden;
@@ -487,14 +489,15 @@ input, select, textarea {
 .hero-badge {
   display: inline-flex;
   align-items: center;
-  background: #F5A623;
-  color: #333;
+  background: rgba(255,255,255,0.2);
+  color: white;
   font-size: 13px;
-  font-weight: 700;
-  padding: 6px 14px;
+  font-weight: 600;
+  padding: 6px 16px;
   border-radius: 20px;
   margin-bottom: 20px;
-  gap: 6px;
+  border: 1px solid rgba(255,255,255,0.4);
+  gap: 4px;
 }
 
 .hero-badge .badge-icon {
@@ -523,10 +526,10 @@ input, select, textarea {
 }
 
 .btn-cta-primary {
-  background: var(--color-red);
+  background: var(--color-cta);
   color: var(--color-white);
-  padding: 14px 28px;
-  border-radius: 6px;
+  padding: 14px 32px;
+  border-radius: 50px;
   font-size: 16px;
   font-weight: 700;
   transition: all var(--transition);
@@ -538,9 +541,9 @@ input, select, textarea {
 }
 
 .btn-cta-primary:hover {
-  background: #c40010;
+  background: var(--color-cta-dark);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(227,0,15,0.4);
+  box-shadow: 0 4px 12px rgba(0,75,68,0.4);
   text-decoration: none;
   color: var(--color-white);
 }
@@ -572,6 +575,8 @@ input, select, textarea {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  min-height: 320px;
 }
 
 .credit-card {
@@ -670,7 +675,7 @@ input, select, textarea {
 }
 
 .card-network span:first-child {
-  background: #E3000F;
+  background: var(--color-cta);
   margin-right: -10px;
   z-index: 1;
 }
@@ -826,10 +831,10 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .btn-simulate {
-  background: var(--color-red);
+  background: var(--color-cta);
   color: var(--color-white);
   padding: 12px 28px;
-  border-radius: 6px;
+  border-radius: 50px;
   font-size: 15px;
   font-weight: 700;
   border: none;
@@ -839,7 +844,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .btn-simulate:hover {
-  background: #c40010;
+  background: var(--color-cta-dark);
   transform: translateY(-1px);
 }
 
@@ -887,6 +892,40 @@ input[type="range"]::-moz-range-thumb {
 .product-card:hover {
   box-shadow: var(--box-shadow-hover);
   transform: translateY(-4px);
+}
+
+/* Sofinco-style product cards (content + visual) */
+.product-card-content {
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.product-card-content h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: 1.3;
+  text-align: center;
+}
+.product-card-content p {
+  font-size: 0.88rem;
+  color: var(--color-gray);
+  line-height: 1.5;
+}
+.product-card-visual {
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid var(--color-border);
+}
+.product-card-text {
+  font-size: 0.88rem;
+  color: var(--color-gray);
+  line-height: 1.5;
+  margin: 0;
 }
 
 .product-card-image {
@@ -1437,7 +1476,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .footer-brand .logo-text span {
-  color: var(--color-red);
+  color: var(--color-white);
 }
 
 .footer-brand p {
@@ -1536,12 +1575,12 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .btn-primary {
-  background: var(--color-red);
+  background: var(--color-cta);
   color: var(--color-white);
 }
 
 .btn-primary:hover {
-  background: #c40010;
+  background: var(--color-cta-dark);
   transform: translateY(-1px);
   text-decoration: none;
   color: var(--color-white);
@@ -2075,10 +2114,10 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .btn-sim-next {
-  background: var(--color-red);
+  background: var(--color-cta);
   color: white;
   padding: 12px 28px;
-  border-radius: 6px;
+  border-radius: 50px;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
@@ -2091,7 +2130,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .btn-sim-next:hover {
-  background: #c40010;
+  background: var(--color-cta-dark);
   transform: translateY(-1px);
 }
 
@@ -2241,7 +2280,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .faq-search-bar button {
-  background: var(--color-red);
+  background: var(--color-cta);
   color: white;
   border: none;
   padding: 12px 20px;
@@ -2682,6 +2721,74 @@ input[type="range"]::-moz-range-thumb {
    ADDITIONAL STYLES
    ============================================= */
 
+/* Hero offer button (outline style) */
+.btn-hero-offer {
+  background: transparent;
+  color: var(--color-white);
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  border: 2px solid rgba(255,255,255,0.7);
+  transition: all var(--transition);
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+.btn-hero-offer:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: white;
+  text-decoration: none;
+  color: white;
+}
+
+/* Hero person area */
+.hero-person-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.hero-person-svg {
+  width: 100%;
+  height: 100%;
+}
+.hero-card-panel {
+  position: relative;
+  z-index: 2;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+.hero-card-title {
+  color: rgba(255,255,255,0.9);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.btn-card-white {
+  display: inline-block;
+  margin-top: 12px;
+  background: white;
+  color: var(--color-primary);
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all var(--transition);
+}
+.btn-card-white:hover {
+  background: #f0f0f0;
+  text-decoration: none;
+  color: var(--color-primary);
+}
+
 /* Hero offer section */
 .hero-offer {
   display: flex;
@@ -2799,7 +2906,7 @@ input[type="range"]::-moz-range-thumb {
 .faq-search-bar { display: flex; max-width: 500px; background: white; border-radius: 8px; overflow: hidden; }
 .faq-search-bar input { flex: 1; padding: 12px 16px; border: none; font-size: 1rem; font-family: inherit; }
 .faq-search-bar input:focus { outline: none; }
-.faq-search-bar button { background: #E3000F; border: none; padding: 12px 16px; cursor: pointer; color: white; }
+.faq-search-bar button { background: var(--color-cta); border: none; padding: 12px 16px; cursor: pointer; color: white; }
 .faq-categories { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
 .faq-category-btn { padding: 8px 16px; border: 1.5px solid #E0E0E0; border-radius: 20px; background: white; cursor: pointer; font-size: 0.9rem; font-family: inherit; transition: all 0.2s; }
 .faq-category-btn.active, .faq-category-btn:hover { border-color: #00334D; background: #EBF5FF; color: #00334D; font-weight: 600; }
@@ -2817,3 +2924,95 @@ input[type="range"]::-moz-range-thumb {
   cursor: pointer;
 }
 .btn-outline:hover { background: #00334D; color: white; text-decoration: none; }
+
+/* =============================================
+   LOGO ALIAS (product pages use .logo not .site-logo)
+   ============================================= */
+.logo { text-decoration: none; flex-shrink: 0; }
+.logo .logo-text { font-size: 26px; font-weight: 700; color: var(--color-primary); letter-spacing: -0.5px; }
+.logo:hover { text-decoration: none; }
+
+/* =============================================
+   PRODUCT PAGES - MINI SIMULATOR BOX
+   ============================================= */
+.mini-sim-box {
+  background: var(--color-light-gray);
+  border-radius: 16px;
+  padding: 28px;
+}
+.sim-controls {
+  display: grid;
+  grid-template-columns: 1fr 180px auto;
+  gap: 20px;
+  align-items: end;
+}
+@media (max-width: 768px) { .sim-controls { grid-template-columns: 1fr; } }
+
+.sim-amount label,
+.sim-duration label { font-size: 14px; font-weight: 600; color: var(--color-dark-gray); display: block; margin-bottom: 8px; }
+.amount-display-row { margin-bottom: 8px; }
+.amount-value { font-size: 1.8rem; font-weight: 700; color: var(--color-primary); }
+.sim-duration select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: var(--font-family);
+  background: white;
+  color: var(--color-dark-gray);
+  cursor: pointer;
+}
+.sim-duration select:focus { border-color: var(--color-primary); outline: none; }
+.sim-preview { margin-bottom: 12px; }
+.sim-preview-label { display: block; font-size: 12px; color: var(--color-gray); margin-bottom: 4px; }
+.sim-preview-amount { display: block; font-size: 1.3rem; font-weight: 700; color: var(--color-primary); }
+
+/* Simulation landing page */
+.simulation-section { padding: 80px 0; }
+.simulation-section h2 { font-size: 1.6rem; font-weight: 700; color: var(--color-primary); margin-bottom: 32px; text-align: center; }
+
+/* =============================================
+   DROPDOWN ALIAS (product pages use .dropdown-col and .dropdown-heading)
+   ============================================= */
+.dropdown-col { min-width: 160px; }
+.dropdown-heading { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--color-gray); letter-spacing: 0.5px; margin-bottom: 8px; }
+.dropdown-col ul { list-style: none; }
+.dropdown-col ul li a { display: block; padding: 5px 0; font-size: 14px; color: var(--color-dark-gray); transition: color var(--transition); }
+.dropdown-col ul li a:hover { color: var(--color-primary); text-decoration: none; }
+.dropdown { display: flex; gap: 24px; }
+
+/* =============================================
+   PRODUCT PAGES - SECTION STRUCTURE
+   ============================================= */
+.product-hero { background: linear-gradient(155deg, #1a7fc1 0%, #005580 40%, #00334D 100%); padding: 60px 0; color: white; }
+.product-hero h1 { font-size: 2rem; font-weight: 700; margin-bottom: 16px; }
+.product-hero p { font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin-bottom: 0; line-height: 1.6; }
+.product-hero .breadcrumb a { color: rgba(255,255,255,0.7); }
+.product-hero .breadcrumb span { color: rgba(255,255,255,0.5); }
+.product-section { padding: 60px 0; }
+.product-section h2 { font-size: 1.5rem; font-weight: 700; color: var(--color-primary); margin-bottom: 24px; }
+
+/* =============================================
+   FOOTER COMPACT (product pages use .footer-top / .footer-legal)
+   ============================================= */
+.footer-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 32px; padding-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 24px; }
+.footer-brand .footer-logo { font-size: 1.6rem; font-weight: 700; color: white; }
+.footer-nav { display: flex; gap: 40px; flex-wrap: wrap; }
+.footer-col h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.6); margin-bottom: 12px; }
+.footer-legal { font-size: 12px; color: rgba(255,255,255,0.5); }
+
+/* =============================================
+   FAQ SECTION (used on product pages)
+   ============================================= */
+.faq-section { padding: 60px 0; background: #F8F9FA; }
+.faq-section h2 { font-size: 1.5rem; font-weight: 700; color: var(--color-primary); margin-bottom: 24px; }
+.faq-list { max-width: 760px; }
+.faq-item { border-bottom: 1px solid var(--color-border); background: none; border-radius: 0; margin-bottom: 0; }
+.faq-question { width: 100%; background: none; border: none; padding: 18px 0; display: flex; justify-content: space-between; align-items: center; font-size: 1rem; font-weight: 600; color: var(--color-dark-gray); cursor: pointer; text-align: left; font-family: var(--font-family); gap: 16px; }
+.faq-question:hover { color: var(--color-primary); }
+.faq-icon { font-size: 1.4rem; flex-shrink: 0; transition: transform 0.2s; background: none; width: auto; height: auto; color: var(--color-gray); }
+.faq-item.open .faq-icon { background: none; color: var(--color-primary); transform: rotate(45deg); }
+.faq-answer p { color: #555; line-height: 1.7; font-size: 0.95rem; }
+.faq-item.open .faq-answer { max-height: 600px; }
+.faq-answer-inner { padding: 0 0 16px; border-top: none; }
