@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suivi de dossier — SOrloz</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%2300334D'/><text y='.9em' font-size='70' font-family='sans-serif' fill='white' x='10'>S</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <style>
+    .login-section { min-height: 60vh; display: flex; align-items: center; padding: 60px 0; }
+    .login-card { background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.1); padding: 48px; max-width: 480px; margin: 0 auto; width: 100%; }
+    .login-card h2 { font-size: 1.5rem; font-weight: 700; color: #00334D; margin-bottom: 8px; text-align: center; }
+    .login-card p { color: #666; text-align: center; margin-bottom: 32px; }
+    .login-form .form-field { margin-bottom: 16px; }
+    .login-form label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; }
+    .login-form input { width: 100%; padding: 12px 14px; border: 1.5px solid #E0E0E0; border-radius: 8px; font-size: 1rem; font-family: inherit; }
+    .login-form input:focus { border-color: #00334D; outline: none; }
+    .login-form .btn-cta-primary { width: 100%; padding: 14px; font-size: 1rem; margin-top: 8px; }
+    .or-divider { text-align: center; margin: 20px 0; color: #999; position: relative; }
+    .or-divider::before, .or-divider::after { content: ''; position: absolute; top: 50%; width: 40%; height: 1px; background: #E0E0E0; }
+    .or-divider::before { left: 0; }
+    .or-divider::after { right: 0; }
+    .tracking-options { display: grid; gap: 12px; }
+    .tracking-option { border: 1.5px solid #E0E0E0; border-radius: 10px; padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s; text-decoration: none; color: inherit; }
+    .tracking-option:hover { border-color: #00334D; background: #EBF5FF; text-decoration: none; }
+    .tracking-option-icon { width: 40px; height: 40px; background: #EBF5FF; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .tracking-option-text strong { display: block; font-size: 0.95rem; }
+    .tracking-option-text span { font-size: 0.8rem; color: #999; }
+  </style>
+</head>
+<body>
+<div class="legal-bar"><p>Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.</p></div>
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="../" class="logo"><span class="logo-text">SOrloz</span></a>
+    <nav class="main-nav"><ul>
+      <li><a href="../credit-pret/pret-personnel.html">Prêt personnel</a></li>
+      <li><a href="../credit-pret/credit-renouvelable.html">Crédit renouvelable</a></li>
+      <li><a href="../credit-pret/rachat-credit.html">Rachat de crédits</a></li>
+      <li><a href="../nous-decouvrir/index.html">Nous découvrir</a></li>
+      <li><a href="../faq-questions-reponses/index.html">Aide</a></li>
+    </ul></nav>
+    <div class="header-actions">
+      <a href="index.html" class="btn-login" style="background:#002437;"><svg width="16" height="18" fill="none" viewBox="0 0 16 18" stroke="white" stroke-width="1.5"><circle cx="8" cy="5" r="4"/><path d="M1 17c0-4 3-6 7-6s7 2 7 6"/></svg><span>Mon espace</span></a>
+      <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<nav class="mobile-nav"><ul>
+  <li><a href="../credit-pret/pret-personnel.html">Prêt personnel</a></li>
+  <li><a href="../credit-pret/credit-renouvelable.html">Crédit renouvelable</a></li>
+  <li><a href="../faq-questions-reponses/index.html">Aide</a></li>
+</ul></nav>
+<main id="content">
+  <div class="suivi-section">
+    <div class="container">
+      <nav class="breadcrumb"><a href="../">Accueil</a><span>/</span><span>Mon espace client</span></nav>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;">
+
+        <!-- Login card -->
+        <div class="login-card">
+          <div style="text-align:center;margin-bottom:24px;">
+            <div style="width:60px;height:60px;background:#00334D;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+              <svg width="28" height="32" fill="none" viewBox="0 0 28 32" stroke="white" stroke-width="1.8"><circle cx="14" cy="9" r="7"/><path d="M2 30c0-7 5.5-11 12-11s12 4 12 11"/></svg>
+            </div>
+          </div>
+          <h2>Se connecter</h2>
+          <p>Accédez à votre espace client SOrloz</p>
+          <form class="login-form" onsubmit="handleLogin(event)">
+            <div class="form-field">
+              <label for="login-email">Email ou identifiant</label>
+              <input type="email" id="login-email" placeholder="votre@email.fr" required>
+            </div>
+            <div class="form-field">
+              <label for="login-pwd">Mot de passe</label>
+              <input type="password" id="login-pwd" placeholder="••••••••" required>
+            </div>
+            <a href="#" style="font-size:0.85rem;color:#00334D;display:block;margin-bottom:16px;">Mot de passe oublié ?</a>
+            <button type="submit" class="btn-cta-primary">Se connecter</button>
+          </form>
+          <div class="or-divider">ou</div>
+          <p style="text-align:center;font-size:0.9rem;color:#666;">Pas encore client ? <a href="../parcours-simulateur/" style="color:#00334D;font-weight:600;">Faire une demande</a></p>
+        </div>
+
+        <!-- Tracking options -->
+        <div>
+          <h2 style="color:#00334D;margin-bottom:24px;">Suivre mon dossier</h2>
+          <div class="tracking-options">
+            <a href="#" class="tracking-option">
+              <div class="tracking-option-icon"><svg width="20" height="22" viewBox="0 0 20 22" fill="none" stroke="#00334D" stroke-width="1.5"><rect x="1" y="3" width="18" height="18" rx="2"/><line x1="6" y1="9" x2="10" y2="9"/><line x1="6" y1="12" x2="14" y2="12"/><line x1="6" y1="15" x2="14" y2="15"/></svg></div>
+              <div class="tracking-option-text">
+                <strong>Mon dossier de crédit</strong>
+                <span>Suivez l'avancement de votre demande</span>
+              </div>
+            </a>
+            <a href="#" class="tracking-option">
+              <div class="tracking-option-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#00334D" stroke-width="1.5"><circle cx="10" cy="10" r="9"/><path d="M10 6v4l3 3"/></svg></div>
+              <div class="tracking-option-text">
+                <strong>Mes simulations en attente</strong>
+                <span>Retrouvez vos projets sauvegardés</span>
+              </div>
+            </a>
+            <a href="#" class="tracking-option">
+              <div class="tracking-option-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#00334D" stroke-width="1.5"><rect x="2" y="4" width="16" height="14" rx="2"/><path d="M6 4V2M14 4V2M2 10h16"/></svg></div>
+              <div class="tracking-option-text">
+                <strong>Mes contrats en cours</strong>
+                <span>Gérez vos crédits existants</span>
+              </div>
+            </a>
+            <a href="#" class="tracking-option">
+              <div class="tracking-option-icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#00334D" stroke-width="1.5"><path d="M10 2l2.4 5.4L18 8l-4 3.9.9 5.6L10 15l-4.9 2.5.9-5.6L2 8l5.6-.6z"/></svg></div>
+              <div class="tracking-option-text">
+                <strong>Mes documents</strong>
+                <span>Consultez et téléchargez vos justificatifs</span>
+              </div>
+            </a>
+          </div>
+          <div style="background:#EBF5FF;border-radius:10px;padding:16px;margin-top:20px;">
+            <p style="font-size:0.85rem;color:#00334D;"><strong>📞 Service client :</strong> 0 800 02 05 05</p>
+            <p style="font-size:0.8rem;color:#666;">Appel gratuit — Lun-Ven 8h-20h, Sam 9h-18h</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top"><div class="footer-brand"><span class="footer-logo">SOrloz</span></div>
+      <div class="footer-nav"><div class="footer-col"><h4>Nos crédits</h4><ul>
+        <li><a href="../credit-pret/pret-personnel.html">Prêt personnel</a></li>
+        <li><a href="../credit-pret/credit-renouvelable.html">Crédit renouvelable</a></li>
+        <li><a href="../credit-pret/rachat-credit.html">Rachat de crédits</a></li>
+      </ul></div></div>
+    </div>
+    <div class="footer-legal"><p>© SOrloz 2026 — Un crédit vous engage et doit être remboursé.</p></div>
+  </div>
+</footer>
+<script src="../js/main.js"></script>
+<script src="../js/i18n.js"></script>
+<script>
+  function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value;
+    if (email) alert('Connexion simulée pour ' + email + '. En production, ceci vous connecterait à votre espace client SOrloz.');
+  }
+</script>
+</body>
+</html>

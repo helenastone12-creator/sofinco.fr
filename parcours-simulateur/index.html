@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="page_title_sim">SOrloz — Simulateur de crédit</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%2300334D'/><text y='.9em' font-size='70' font-family='sans-serif' fill='white' x='10'>S</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <style>
+    .sim-page { min-height: 100vh; background: #F8F9FA; padding-top: 130px; }
+    .sim-wrapper { max-width: 780px; margin: 0 auto; padding: 0 20px 60px; }
+    .sim-header-bar { background: white; border-radius: 12px; padding: 24px 32px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .sim-title { font-size: 1.4rem; font-weight: 700; color: #00334D; margin-bottom: 16px; }
+    .progress-bar-wrap { display: flex; align-items: center; gap: 8px; }
+    .progress-step { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+    .progress-dot { width: 28px; height: 28px; border-radius: 50%; background: #E0E0E0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #999; transition: all 0.3s; }
+    .progress-step.done .progress-dot { background: #27AE60; color: white; }
+    .progress-step.done .progress-dot::before { content: '✓'; }
+    .progress-step.done .progress-dot span { display: none; }
+    .progress-step.active .progress-dot { background: #00334D; color: white; box-shadow: 0 0 0 3px rgba(0,51,77,0.2); }
+    .progress-line { flex: 1; height: 2px; background: #E0E0E0; transition: background 0.3s; }
+    .progress-line.done { background: #27AE60; }
+    .progress-label { font-size: 10px; color: #999; white-space: nowrap; }
+    .progress-step.active .progress-label { color: #00334D; font-weight: 600; }
+
+    .sim-step { display: none; }
+    .sim-step.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: none; } }
+
+    .step-card { background: white; border-radius: 12px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .step-card h2 { font-size: 1.5rem; font-weight: 700; color: #00334D; margin-bottom: 8px; }
+    .step-card p.step-desc { color: #666; margin-bottom: 28px; }
+
+    /* Step 1 - Project cards */
+    .project-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media (max-width: 600px) { .project-cards { grid-template-columns: repeat(2, 1fr); } }
+    .project-card { border: 2px solid #E0E0E0; border-radius: 10px; padding: 20px 16px; text-align: center; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .project-card:hover { border-color: #00334D; box-shadow: 0 4px 12px rgba(0,51,77,0.12); }
+    .project-card.selected { border-color: #00334D; background: #EBF5FF; }
+    .project-card .card-emoji { font-size: 2.5rem; }
+    .project-card .card-label { font-weight: 600; font-size: 0.9rem; color: #333; }
+    .project-card.selected .card-label { color: #00334D; }
+
+    /* Step 2 - Amount */
+    .amount-section { margin-bottom: 28px; }
+    .amount-section label { display: block; font-weight: 600; color: #333; margin-bottom: 12px; font-size: 1rem; }
+    .amount-big-display { font-size: 2.5rem; font-weight: 700; color: #00334D; text-align: center; margin-bottom: 16px; }
+    #sim-amount-slider { width: 100%; height: 6px; accent-color: #00334D; }
+    .slider-limits { display: flex; justify-content: space-between; font-size: 0.8rem; color: #999; margin-top: 6px; }
+    .preset-amounts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .preset-btn-sim { padding: 8px 16px; border: 1.5px solid #E0E0E0; border-radius: 20px; background: white; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; font-family: inherit; }
+    .preset-btn-sim:hover, .preset-btn-sim.active { border-color: #00334D; background: #EBF5FF; color: #00334D; font-weight: 600; }
+    .amount-input-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .amount-input-row input { flex: 1; padding: 10px 16px; border: 2px solid #E0E0E0; border-radius: 8px; font-size: 1.2rem; font-weight: 700; color: #00334D; text-align: right; font-family: inherit; }
+    .amount-input-row input:focus { border-color: #00334D; outline: none; }
+    .amount-input-row span { color: #666; font-size: 1.2rem; }
+
+    /* Step 3 - Duration */
+    .duration-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+    @media (max-width: 500px) { .duration-grid { grid-template-columns: repeat(3, 1fr); } }
+    .duration-btn { padding: 14px 10px; border: 2px solid #E0E0E0; border-radius: 8px; background: white; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.2s; font-family: inherit; text-align: center; }
+    .duration-btn:hover { border-color: #00334D; }
+    .duration-btn.selected { border-color: #00334D; background: #00334D; color: white; }
+    .duration-preview { background: #EBF5FF; border: 1px solid #C5DCF0; border-radius: 8px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .duration-preview .preview-label { color: #666; font-size: 0.9rem; }
+    .duration-preview .preview-amount { font-size: 1.4rem; font-weight: 700; color: #00334D; }
+
+    /* Step 4 - Results */
+    .results-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 28px; }
+    @media (max-width: 500px) { .results-cards { grid-template-columns: 1fr; } }
+    .result-card { border: 1px solid #E0E0E0; border-radius: 10px; padding: 20px; text-align: center; }
+    .result-card.highlight { background: #00334D; border-color: #00334D; color: white; }
+    .result-card .result-label { font-size: 0.85rem; color: #666; margin-bottom: 4px; }
+    .result-card.highlight .result-label { color: rgba(255,255,255,0.75); }
+    .result-card .result-value { font-size: 1.8rem; font-weight: 700; color: #00334D; }
+    .result-card.highlight .result-value { color: white; }
+    .result-card .result-unit { font-size: 0.8rem; color: #999; }
+    .result-card.highlight .result-unit { color: rgba(255,255,255,0.6); }
+    .results-table-wrap { margin-top: 24px; overflow-x: auto; }
+    .results-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .results-table th { background: #F5F5F5; padding: 10px 12px; text-align: left; font-weight: 600; color: #555; border-bottom: 2px solid #E0E0E0; }
+    .results-table td { padding: 10px 12px; border-bottom: 1px solid #E0E0E0; color: #333; }
+    .results-table tr:last-child td { border-bottom: none; }
+    .results-actions { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+    .btn-apply { background: #E3000F; color: white; padding: 16px 32px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+    .btn-apply:hover { background: #c0000d; }
+    .btn-modify { background: transparent; color: #00334D; padding: 10px; border: none; cursor: pointer; font-family: inherit; text-decoration: underline; font-size: 0.9rem; }
+
+    /* Steps 5 & 6 - Forms */
+    .form-section { margin-bottom: 24px; }
+    .form-section h3 { font-size: 1rem; font-weight: 700; color: #00334D; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #E0E0E0; }
+    .form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+    .form-row.full { grid-template-columns: 1fr; }
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-field label { font-size: 0.9rem; font-weight: 600; color: #444; }
+    .form-field input, .form-field select { padding: 11px 14px; border: 1.5px solid #E0E0E0; border-radius: 8px; font-size: 1rem; font-family: inherit; transition: border-color 0.2s; }
+    .form-field input:focus, .form-field select:focus { border-color: #00334D; outline: none; box-shadow: 0 0 0 3px rgba(0,51,77,0.08); }
+    .form-field input.error { border-color: #E3000F; }
+    .error-msg { font-size: 0.8rem; color: #E3000F; display: none; }
+    .form-field.has-error .error-msg { display: block; }
+    .radio-group { display: flex; gap: 12px; flex-wrap: wrap; }
+    .radio-label { display: flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1.5px solid #E0E0E0; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: all 0.2s; user-select: none; }
+    .radio-label:hover { border-color: #00334D; }
+    .radio-label.checked { border-color: #00334D; background: #EBF5FF; color: #00334D; }
+    .radio-label input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+
+    /* Step 7 - Confirmation */
+    .confirmation-step { text-align: center; padding: 20px 0; }
+    .checkmark-wrap { width: 80px; height: 80px; background: #27AE60; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; animation: popIn 0.5s ease; }
+    @keyframes popIn { 0% { transform: scale(0); opacity:0; } 80% { transform: scale(1.1); } 100% { transform: scale(1); opacity:1; } }
+    .checkmark-wrap svg { color: white; }
+    .confirmation-title { font-size: 1.4rem; font-weight: 700; color: #00334D; margin-bottom: 12px; }
+    .confirmation-subtitle { color: #666; margin-bottom: 32px; }
+    .confirmation-summary { background: #F8F9FA; border-radius: 10px; padding: 20px; text-align: left; margin-bottom: 28px; }
+    .summary-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #E0E0E0; font-size: 0.95rem; }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row .label { color: #666; }
+    .summary-row .value { font-weight: 600; color: #00334D; }
+    .btn-home { background: #00334D; color: white; padding: 14px 32px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .btn-home:hover { background: #002437; }
+
+    .sim-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 28px; gap: 12px; }
+    .btn-sim-prev { background: transparent; color: #00334D; padding: 12px 24px; border: 2px solid #00334D; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+    .btn-sim-prev:hover { background: #EBF5FF; }
+    .btn-sim-next { background: #00334D; color: white; padding: 12px 28px; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+    .btn-sim-next:hover { background: #002437; }
+
+    .sim-security { display: flex; align-items: center; gap: 8px; color: #999; font-size: 0.8rem; margin-top: 16px; justify-content: center; }
+  </style>
+</head>
+<body>
+
+<!-- Legal Bar -->
+<div class="legal-bar">
+  <p data-i18n="header_legal">Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager.</p>
+</div>
+
+<!-- Header -->
+<header class="site-header" role="banner">
+  <div class="container header-inner">
+    <a href="../" class="logo" aria-label="SOrloz - Accueil">
+      <span class="logo-text">SOrloz</span>
+    </a>
+    <nav class="main-nav" role="navigation">
+      <ul>
+        <li><a href="../credit-pret/pret-personnel.html">Prêt personnel</a></li>
+        <li><a href="../credit-pret/credit-renouvelable.html">Crédit renouvelable</a></li>
+        <li><a href="../credit-pret/rachat-credit.html">Rachat de crédits</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a href="../suivi-de-dossier/index.html" class="btn-login">
+        <svg width="16" height="18" fill="none" viewBox="0 0 16 18" stroke="white" stroke-width="1.5"><circle cx="8" cy="5" r="4"/><path d="M1 17c0-4 3-6 7-6s7 2 7 6"/></svg>
+        <span>Se connecter</span>
+      </a>
+      <button class="hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="sim-page">
+  <div class="sim-wrapper">
+
+    <!-- Simulator header with progress -->
+    <div class="sim-header-bar">
+      <p class="sim-title">Simulateur de crédit SOrloz</p>
+      <div class="progress-bar-wrap" id="progress-bar" role="progressbar" aria-valuemin="1" aria-valuemax="7">
+        <div class="progress-step active" id="prog-1">
+          <div class="progress-dot"><span>1</span></div>
+          <div class="progress-label">Projet</div>
+        </div>
+        <div class="progress-line" id="line-1"></div>
+        <div class="progress-step" id="prog-2">
+          <div class="progress-dot"><span>2</span></div>
+          <div class="progress-label">Montant</div>
+        </div>
+        <div class="progress-line" id="line-2"></div>
+        <div class="progress-step" id="prog-3">
+          <div class="progress-dot"><span>3</span></div>
+          <div class="progress-label">Durée</div>
+        </div>
+        <div class="progress-line" id="line-3"></div>
+        <div class="progress-step" id="prog-4">
+          <div class="progress-dot"><span>4</span></div>
+          <div class="progress-label">Résultats</div>
+        </div>
+        <div class="progress-line" id="line-4"></div>
+        <div class="progress-step" id="prog-5">
+          <div class="progress-dot"><span>5</span></div>
+          <div class="progress-label">Identité</div>
+        </div>
+        <div class="progress-line" id="line-5"></div>
+        <div class="progress-step" id="prog-6">
+          <div class="progress-dot"><span>6</span></div>
+          <div class="progress-label">Situation</div>
+        </div>
+        <div class="progress-line" id="line-6"></div>
+        <div class="progress-step" id="prog-7">
+          <div class="progress-dot"><span>7</span></div>
+          <div class="progress-label">Confirmation</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 1: PROJECT TYPE -->
+    <div class="sim-step active step-card" id="step1">
+      <h2 data-i18n="sim_project_title">Votre projet</h2>
+      <p class="step-desc">Choisissez le type de crédit qui correspond à votre besoin</p>
+      <div class="project-cards">
+        <button class="project-card" data-type="perso">
+          <span class="card-emoji">👤</span>
+          <span class="card-label" data-i18n="sim_project_family">Famille & Loisirs</span>
+        </button>
+        <button class="project-card" data-type="auto">
+          <span class="card-emoji">🚗</span>
+          <span class="card-label" data-i18n="sim_project_auto">Auto</span>
+        </button>
+        <button class="project-card" data-type="travaux">
+          <span class="card-emoji">🏠</span>
+          <span class="card-label" data-i18n="sim_project_works">Travaux</span>
+        </button>
+        <button class="project-card" data-type="moto">
+          <span class="card-emoji">🏍️</span>
+          <span class="card-label" data-i18n="sim_project_moto">Moto</span>
+        </button>
+        <button class="project-card" data-type="perso">
+          <span class="card-emoji">✦</span>
+          <span class="card-label" data-i18n="sim_project_other">Autre</span>
+        </button>
+        <button class="project-card" data-type="rac">
+          <span class="card-emoji">🔄</span>
+          <span class="card-label" data-i18n="sim_project_rac">Regroupement de crédits</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 2: AMOUNT -->
+    <div class="sim-step step-card" id="step2">
+      <h2 data-i18n="sim_amount_title">Votre montant</h2>
+      <p class="step-desc">Quel montant souhaitez-vous emprunter ?</p>
+      <div class="amount-section">
+        <div class="amount-input-row">
+          <input type="number" id="sim-amount-input" min="1000" max="75000" step="100" value="10000" aria-label="Montant en euros">
+          <span>€</span>
+        </div>
+        <div class="amount-big-display" id="sim-amount-display">10 000 €</div>
+        <input type="range" id="sim-amount-slider" min="1000" max="75000" step="100" value="10000">
+        <div class="slider-limits"><span>1 000 €</span><span>75 000 €</span></div>
+        <div class="preset-amounts">
+          <button class="preset-btn-sim" data-val="1000">1 000 €</button>
+          <button class="preset-btn-sim" data-val="3000">3 000 €</button>
+          <button class="preset-btn-sim" data-val="5000">5 000 €</button>
+          <button class="preset-btn-sim active" data-val="10000">10 000 €</button>
+          <button class="preset-btn-sim" data-val="15000">15 000 €</button>
+          <button class="preset-btn-sim" data-val="20000">20 000 €</button>
+          <button class="preset-btn-sim" data-val="30000">30 000 €</button>
+        </div>
+      </div>
+      <div class="sim-nav">
+        <button class="btn-sim-prev" data-i18n="sim_prev">Précédent</button>
+        <button class="btn-sim-next" data-i18n="sim_next">Suivant</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: DURATION -->
+    <div class="sim-step step-card" id="step3">
+      <h2 data-i18n="sim_duration_title">Votre durée</h2>
+      <p class="step-desc">Sur quelle durée souhaitez-vous rembourser ?</p>
+      <div class="duration-grid">
+        <button class="duration-btn" data-months="6">6 mois</button>
+        <button class="duration-btn" data-months="12">12 mois</button>
+        <button class="duration-btn" data-months="18">18 mois</button>
+        <button class="duration-btn" data-months="24">24 mois</button>
+        <button class="duration-btn" data-months="36" >36 mois</button>
+        <button class="duration-btn" data-months="48">48 mois</button>
+        <button class="duration-btn" data-months="60">60 mois</button>
+        <button class="duration-btn" data-months="72">72 mois</button>
+        <button class="duration-btn selected" data-months="84">84 mois</button>
+      </div>
+      <div class="duration-preview">
+        <span class="preview-label">Mensualité estimée</span>
+        <span class="preview-amount" id="duration-preview-amount">—</span>
+      </div>
+      <div class="sim-nav">
+        <button class="btn-sim-prev">Précédent</button>
+        <button class="btn-sim-next">Voir les résultats</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: RESULTS -->
+    <div class="sim-step step-card" id="step4">
+      <h2 data-i18n="sim_results_title">Résultats de simulation</h2>
+      <p class="step-desc">Voici l'estimation de votre crédit — sans engagement</p>
+      <div class="results-cards">
+        <div class="result-card highlight">
+          <div class="result-label" data-i18n="sim_monthly">Mensualité</div>
+          <div class="result-value" id="result-monthly">—</div>
+          <div class="result-unit">€/mois</div>
+        </div>
+        <div class="result-card">
+          <div class="result-label" data-i18n="sim_taeg">TAEG fixe</div>
+          <div class="result-value" id="result-taeg">—</div>
+          <div class="result-unit">%</div>
+        </div>
+        <div class="result-card">
+          <div class="result-label" data-i18n="sim_total">Montant total dû</div>
+          <div class="result-value" id="result-total">—</div>
+          <div class="result-unit">€</div>
+        </div>
+        <div class="result-card">
+          <div class="result-label" data-i18n="sim_interest">Dont intérêts</div>
+          <div class="result-value" id="result-interest">—</div>
+          <div class="result-unit">€</div>
+        </div>
+      </div>
+      <div class="results-table-wrap">
+        <p style="font-weight:600; color:#00334D; margin-bottom:12px;">Détail du remboursement</p>
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>Période</th>
+              <th>Mensualité</th>
+              <th>Intérêts</th>
+              <th>Capital</th>
+              <th>Capital restant</th>
+            </tr>
+          </thead>
+          <tbody id="amort-tbody">
+            <tr><td colspan="5" style="text-align:center;color:#999">Calcul en cours...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="results-actions">
+        <button class="btn-apply" data-i18n="sim_apply">Je fais ma demande</button>
+        <button class="btn-modify" data-i18n="sim_modify">Modifier ma simulation</button>
+      </div>
+      <p style="font-size:0.78rem; color:#999; margin-top:16px;">Simulation fournie à titre indicatif, sans engagement. Offre sous réserve d'acceptation définitive de votre dossier.</p>
+    </div>
+
+    <!-- STEP 5: PERSONAL INFO -->
+    <div class="sim-step step-card" id="step5">
+      <h2 data-i18n="form_identity">Votre identité</h2>
+      <p class="step-desc">Renseignez vos informations personnelles</p>
+      <div class="form-section">
+        <h3>Civilité</h3>
+        <div class="radio-group">
+          <label class="radio-label checked">
+            <input type="radio" name="civility" value="M" checked>
+            <span data-i18n="form_mr">M.</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="civility" value="Mme">
+            <span data-i18n="form_mrs">Mme</span>
+          </label>
+        </div>
+      </div>
+      <div class="form-section">
+        <h3>Informations personnelles</h3>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="inp-firstname" data-i18n="form_firstname">Prénom</label>
+            <input type="text" id="inp-firstname" autocomplete="given-name" data-i18n-placeholder="form_firstname">
+            <span class="error-msg"></span>
+          </div>
+          <div class="form-field">
+            <label for="inp-lastname" data-i18n="form_lastname">Nom</label>
+            <input type="text" id="inp-lastname" autocomplete="family-name" data-i18n-placeholder="form_lastname">
+            <span class="error-msg"></span>
+          </div>
+        </div>
+        <div class="form-row mt-16">
+          <div class="form-field">
+            <label for="inp-birthdate" data-i18n="form_birthdate">Date de naissance</label>
+            <input type="date" id="inp-birthdate" autocomplete="bday">
+            <span class="error-msg"></span>
+          </div>
+          <div class="form-field">
+            <label for="inp-zipcode" data-i18n="form_zipcode">Code postal</label>
+            <input type="text" id="inp-zipcode" maxlength="5" autocomplete="postal-code" placeholder="75001">
+            <span class="error-msg"></span>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <h3>Coordonnées</h3>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="inp-email" data-i18n="form_email">Adresse email</label>
+            <input type="email" id="inp-email" autocomplete="email" placeholder="vous@exemple.fr">
+            <span class="error-msg"></span>
+          </div>
+          <div class="form-field">
+            <label for="inp-phone" data-i18n="form_phone">Téléphone portable</label>
+            <input type="tel" id="inp-phone" autocomplete="tel" placeholder="06 12 34 56 78">
+            <span class="error-msg"></span>
+          </div>
+        </div>
+      </div>
+      <div class="sim-security">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Vos données sont sécurisées et protégées
+      </div>
+      <div class="sim-nav">
+        <button class="btn-sim-prev">Précédent</button>
+        <button class="btn-sim-next" data-i18n="form_continue">Continuer</button>
+      </div>
+    </div>
+
+    <!-- STEP 6: SITUATION -->
+    <div class="sim-step step-card" id="step6">
+      <h2 data-i18n="form_situation_title">Votre situation</h2>
+      <p class="step-desc">Ces informations nous permettent d'étudier votre dossier</p>
+      <div class="form-section">
+        <h3>Situation professionnelle</h3>
+        <div class="form-row full">
+          <div class="form-field">
+            <label for="inp-situation" data-i18n="form_situation">Situation professionnelle</label>
+            <select id="inp-situation">
+              <option value="">— Sélectionnez —</option>
+              <option value="CDI">CDI</option>
+              <option value="CDD">CDD</option>
+              <option value="fonctionnaire">Fonctionnaire / Titulaire</option>
+              <option value="independant">Indépendant / Profession libérale</option>
+              <option value="retraite">Retraité(e)</option>
+              <option value="sans_emploi">Sans emploi</option>
+              <option value="etudiant">Étudiant(e)</option>
+            </select>
+            <span class="error-msg">Veuillez sélectionner une situation</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <h3>Revenus et charges</h3>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="inp-income" data-i18n="form_income">Revenu mensuel net (€)</label>
+            <input type="number" id="inp-income" min="0" placeholder="2 500">
+            <span class="error-msg">Revenu requis</span>
+          </div>
+          <div class="form-field">
+            <label for="inp-housing" data-i18n="form_housing">Loyer / mensualité immo (€)</label>
+            <input type="number" id="inp-housing" min="0" placeholder="800">
+          </div>
+        </div>
+        <div class="form-row mt-16">
+          <div class="form-field">
+            <label for="inp-other-credits" data-i18n="form_other_credits">Autres crédits en cours (€)</label>
+            <input type="number" id="inp-other-credits" min="0" placeholder="0">
+          </div>
+        </div>
+      </div>
+      <div class="sim-security">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Toutes les informations restent confidentielles
+      </div>
+      <div class="sim-nav">
+        <button class="btn-sim-prev">Précédent</button>
+        <button class="btn-sim-next" data-i18n="form_continue">Continuer</button>
+      </div>
+    </div>
+
+    <!-- STEP 7: CONFIRMATION -->
+    <div class="sim-step step-card" id="step7">
+      <div class="confirmation-step">
+        <div class="checkmark-wrap">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 18 14 26 30 10"/></svg>
+        </div>
+        <h2 class="confirmation-title" data-i18n="confirm_title">Votre demande est en cours de traitement</h2>
+        <p class="confirmation-subtitle" data-i18n="confirm_text">Vous recevrez une réponse de principe dans quelques instants</p>
+        <div class="confirmation-summary" id="confirmation-summary">
+          <!-- Populated by simulator.js -->
+        </div>
+        <p style="font-size:0.85rem; color:#666; margin-bottom:24px;">Un conseiller SOrloz vous contactera sous 24h pour finaliser votre dossier. Vous disposez d'un droit de rétractation de 14 jours.</p>
+        <button class="btn-home" data-i18n="back_home">Retour à l'accueil</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Footer simple -->
+<footer class="site-footer" style="padding: 24px 0;">
+  <div class="container">
+    <div class="footer-legal">
+      <p>© SOrloz 2026 — Simulation fournie à titre indicatif et sans engagement. Offres sous réserve d'acceptation définitive après étude des pièces justificatives.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script src="../js/simulator.js"></script>
+<script src="../js/i18n.js"></script>
+</body>
+</html>
